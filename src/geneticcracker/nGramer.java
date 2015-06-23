@@ -47,7 +47,7 @@ public class nGramer {
             list.add(temp);
 
         }
-
+        System.err.println("Wyuczono się zbioru: "+list.size()+" ngramów");
     }
 
     public void count() {
@@ -76,7 +76,8 @@ public class nGramer {
     .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
                               (e1, e2) -> e1, LinkedHashMap::new));
        for(String s: sortedMap.keySet()){
-           x.append(s+"   wystąpień: "+frequencyMap.get(s)+"\n");
+          double normalize=1000*frequencyMap.get(s)/list.size();
+           x.append(s+"   wystąpień: "+frequencyMap.get(s)+" normalizacja: "+normalize+"\n");
            
        }
     }

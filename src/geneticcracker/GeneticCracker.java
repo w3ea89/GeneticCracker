@@ -5,6 +5,17 @@
  */
 package geneticcracker;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author Krzysztof Sedlak
@@ -72,7 +83,7 @@ public class GeneticCracker extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        trainingPath = new javax.swing.JTextField();
         readTrainingData = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         trainingText = new javax.swing.JTextArea();
@@ -173,6 +184,11 @@ public class GeneticCracker extends javax.swing.JFrame {
         jLabel1.setText("Plik:");
 
         chooseInputFileButton.setLabel("Wybierz");
+        chooseInputFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseInputFileButtonActionPerformed(evt);
+            }
+        });
 
         inputArea.setColumns(20);
         inputArea.setLineWrap(true);
@@ -369,9 +385,14 @@ public class GeneticCracker extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Łamanie kodu", jPanel5);
 
-        jTextField1.setText("jTextField1");
+        trainingPath.setText("Plik treningowy");
 
         readTrainingData.setText("Wczytaj");
+        readTrainingData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                readTrainingDataActionPerformed(evt);
+            }
+        });
 
         trainingText.setColumns(20);
         trainingText.setLineWrap(true);
@@ -409,7 +430,7 @@ public class GeneticCracker extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane5)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(trainingPath, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(readTrainingData)))
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -431,7 +452,7 @@ public class GeneticCracker extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(trainingPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(readTrainingData)
                     .addComponent(jLabel6)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -599,6 +620,61 @@ int n = Integer.parseInt(jComboBox1.getSelectedItem().toString());
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void readTrainingDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readTrainingDataActionPerformed
+ JFileChooser fileChooser = new JFileChooser();
+  File selectedFile = null;
+ FileFilter filter = new FileNameExtensionFilter("Tekst", new String[] {"txt"});
+ fileChooser.setFileFilter(filter);
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+         selectedFile = fileChooser.getSelectedFile();
+          trainingPath.setText(selectedFile.getAbsolutePath());
+        }
+         
+        String readedFile = null;
+    BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(selectedFile));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GeneticCracker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    try {
+        StringBuilder sb = new StringBuilder();
+        String line = br.readLine();
+
+        while (line != null) {
+            sb.append(line);
+            sb.append(System.lineSeparator());
+            line = br.readLine();
+        }
+      readedFile= sb.toString();
+    }   catch (IOException ex) {
+            Logger.getLogger(GeneticCracker.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+     try {
+         br.close();
+     } catch (IOException ex) {
+         Logger.getLogger(GeneticCracker.class.getName()).log(Level.SEVERE, null, ex);
+     }
+    }
+    
+    trainingText.setText(readedFile);
+    
+    }//GEN-LAST:event_readTrainingDataActionPerformed
+
+    
+    private void chooseInputFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseInputFileButtonActionPerformed
+ JFileChooser fileChooser = new JFileChooser();
+ FileFilter filter = new FileNameExtensionFilter("Tekst", new String[] {"txt"});
+ fileChooser.setFileFilter(filter);
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+          File selectedFile = fileChooser.getSelectedFile();
+          inputFileDirectory.setText(selectedFile.getAbsolutePath());
+        }  
+// TODO add your handling code here:
+    }//GEN-LAST:event_chooseInputFileButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -672,7 +748,6 @@ int n = Integer.parseInt(jComboBox1.getSelectedItem().toString());
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTabbedPane jTabbedPane4;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField keyField;
     private javax.swing.JTextArea ngramResults;
@@ -680,6 +755,7 @@ int n = Integer.parseInt(jComboBox1.getSelectedItem().toString());
     private javax.swing.JButton readTrainingData;
     private javax.swing.JButton setCode;
     private javax.swing.JRadioButton substRadio;
+    private javax.swing.JTextField trainingPath;
     private javax.swing.JTextArea trainingText;
     private javax.swing.JRadioButton transpRadio;
     // End of variables declaration//GEN-END:variables
